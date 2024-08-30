@@ -107,6 +107,12 @@ _flatten() {
 			print line $0
 			line = ""
 		}
+		END {
+			if (line) {
+				# line continuation at EOF????????? (we should turn this into an "oh no" of its own)
+				print line
+			}
+		}
 	' <<<"$df"
 }
 
