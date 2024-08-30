@@ -130,7 +130,7 @@ _filter() {
 	' <<<"$df"
 }
 
-# TODO warn about "FROM ...:latest" (explicit or implied, and also check "COPY --from=...")
+# TODO warn about "FROM ...:latest" (explicit or implied, and also check "COPY --from=..." and "RUN --mount ...,from=...")
 
 runs="$(_filter 'RUN')"
 if chowns="$(grep -E '^ch(own|mod)[[:space:]]+.*' <<<"$runs")" && [ -n "$chowns" ]; then
@@ -180,6 +180,8 @@ fi
 # TODO complain about missing "--no-network" on "apk del"
 
 # TODO catch "curl" without "-f" / "--fail"
+
+# TODO complain about RUN lines that contain ";" without "set -e" (https://github.com/docker-library/busybox/pull/202); maybe false positives thanks to SHELL, but probably not many
 
 if alpineGlibc="$(grep 'alpine-pkg-glibc' <<<"$df")" && [ -n "$alpineGlibc" ]; then
 	oh_no_context 'use of alpine-pkg-glibc is HIGHLY discouraged, as the results can be very unstable' \
